@@ -1,0 +1,16 @@
+*.in
+private_build.h
+*.dll
+*.o
+*.la
+*.lo
+config.*
+.compile
+.deps
+.libs
+Makefile
+configure
+config/*
+m4/lt*
+m4/libtool*
+autom4te.*
