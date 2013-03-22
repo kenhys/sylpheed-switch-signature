@@ -1,5 +1,7 @@
 lib_LTLIBRARIES = switch_signatures.la
 
+sylpf_srcdir = $(top_srcdir)/../sylplugin_factory/src
+
 switch_signatures_la_SOURCES = switch_signatures.c switch_signatures.h
 switch_signatures_la_LDFLAGS = -module -no-undefined -avoid-version
 
@@ -10,7 +12,8 @@ INCLUDES = \
 	-I$(sylpheed_build_dir)/libsylph \
 	-I$(sylpheed_build_dir)/src \
 	-I$(top_srcdir) \
-	-I$(top_srcdir)/src
+	-I$(top_srcdir)/src \
+	-I$(sylpf_srcdir)
 
 switch_signatures_la_LIBADD = \
 	$(GTK_LIBS) \
