@@ -2,7 +2,12 @@ lib_LTLIBRARIES = switch_signatures.la
 
 sylpf_srcdir = $(top_srcdir)/../sylplugin_factory/src
 
-switch_signatures_la_SOURCES = switch_signatures.c switch_signatures.h
+switch_signatures_la_SOURCES = \
+	switch_signatures.c \
+	switch_signatures.h \
+	$(sylpf_srcdir)/sylplugin_factory.c \
+	$(sylpf_srcdir)/sylplugin_factory.h
+
 switch_signatures_la_LDFLAGS = -module -no-undefined -avoid-version
 
 
