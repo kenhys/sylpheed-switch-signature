@@ -10,7 +10,7 @@ AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE($PACKAGE_NAME, $PACKAGE_VERSION)
 
-AC_DEFINE([SYLPF_ID], [switch_signatures], [""])
+AC_DEFINE([SYLPF_ID], ["$PACKAGE_NAME"], [""])
 AC_DEFINE([SYLPF_OPTION], [switch_signatures_option], [""])
 
 # Checks for programs.
