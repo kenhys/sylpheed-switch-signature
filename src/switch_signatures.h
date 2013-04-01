@@ -47,7 +47,6 @@ typedef struct _SwitchSignature SwitchSignature;
 
 enum {
   SIGNATURE_ACCOUNT_COLUMN,
-  SIGNATURE_MAIL_COLUMN,
   SIGNATURE_SUMMARY_COLUMN,
   N_SIGNATURE_COLUMNS
 };
