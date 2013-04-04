@@ -188,8 +188,12 @@ static void switch_signature_cb(GtkWidget *widget, gpointer data)
   if (sign_found) {
     SYLPF_DEBUG_MSG("signature marker found");
     gtk_text_buffer_delete(buffer, &iter, &end_iter);
-    gtk_text_buffer_insert(buffer, &end_iter, "--\n", 3);
-    gtk_text_buffer_insert(buffer, &end_iter, signature, strlen(signature));
+    signature = g_strdup_printf("%s\n%s",
+                                prefs->sig_sep,
+                                g_strcompress(signature));
+    gtk_text_buffer_insert(buffer, &end_iter,
+                           signature,
+                           g_utf8_strlen(signature, -1));
     signs->signature_index++;
   }
 
