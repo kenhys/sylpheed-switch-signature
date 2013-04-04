@@ -138,6 +138,7 @@ static void switch_signature_cb(GtkWidget *widget, gpointer data)
   GtkTextIter start_iter;
   GtkTextIter end_iter;
   GtkTextBuffer *buffer;
+  PrefsCommon *prefs;
   
   SYLPF_START_FUNC;
 
@@ -169,8 +170,10 @@ static void switch_signature_cb(GtkWidget *widget, gpointer data)
                   gtk_text_buffer_get_text(buffer, &start_iter, &end_iter, TRUE));
     
 
+  prefs = prefs_common_get();
+
   sign_found = gtk_text_iter_backward_search(&end_iter,
-                                             "--",
+                                             prefs->sig_sep,
                                              0,
                                              &iter,
                                              NULL,
