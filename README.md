@@ -11,6 +11,9 @@ Switch Signatures plugin adds functionality to swich
 multiple signatures by clicking signature button on mail
 compose windows.
 
+Note that this plugin overrides default behaviour of
+signature button on mail compose window.
+
 # How to install
 
 Clone sylpheed-switch-signatures repository.
