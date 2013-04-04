@@ -10,16 +10,16 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-04-04 21:18+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: HAYASHI Kentaro <kenhys@gmail.com>\n"
+"Language-Team: HAYASHI Kentaro <kenhys@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/switch_signatures.c:54
 msgid "Switch signature settings [switch_signatures]"
-msgstr ""
+msgstr "署名切り替え設定 [switch_signatures]"
 
 #: src/switch_signatures.c:251
 msgid "Switch Signatures"
@@ -27,27 +27,27 @@ msgstr ""
 
 #: src/switch_signatures.c:268
 msgid "General"
-msgstr ""
+msgstr "一般"
 
 #: src/switch_signatures.c:272
 msgid "About"
-msgstr ""
+msgstr "情報"
 
 #: src/switch_signatures.c:303
 msgid "Manage signatures"
-msgstr ""
+msgstr "署名を管理"
 
 #: src/switch_signatures.c:315
 msgid "Edit signatures"
-msgstr ""
+msgstr "署名を編集"
 
 #: src/switch_signatures.c:433
 msgid "Label"
-msgstr ""
+msgstr "ラベル"
 
 #: src/switch_signatures.c:440
 msgid "Signature"
-msgstr ""
+msgstr "署名"
 
 #: src/switch_signatures.c:542
 msgid "SwitchSignatures"
