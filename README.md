@@ -13,7 +13,7 @@ compose windows.
 
 # How to install
 
-Clone sylpheed-swich-signatures repository.
+Clone sylpheed-switch-signatures repository.
 
 ```
 % git clone https://github.com/kenhys/sylpheed-switch-signature.git
