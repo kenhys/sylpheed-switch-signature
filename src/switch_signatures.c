@@ -139,7 +139,8 @@ static void switch_signature_cb(GtkWidget *widget, gpointer data)
   GtkTextIter end_iter;
   GtkTextBuffer *buffer;
   PrefsCommon *prefs;
-  
+  guint index;
+
   SYLPF_START_FUNC;
 
   signs = data;
@@ -151,6 +152,12 @@ static void switch_signature_cb(GtkWidget *widget, gpointer data)
 
   if (signs->signature_index >= g_list_length(signs->signatures)) {
     signs->signature_index = 0;
+  }
+
+  for (index = 0; index < g_list_length(signs->signatures); index++) {
+    signature = g_list_nth_data(signs->signatures, index);
+    SYLPF_DEBUG_VAL("signature index", index);
+    SYLPF_DEBUG_STR("signature text", signature);
   }
 
   signature = g_list_nth_data(signs->signatures, signs->signature_index);
