@@ -338,6 +338,10 @@ static GtkWidget *create_signatures_manage_buttons(void)
                    G_CALLBACK(edit_current_signature_cb),
                    &current_signature);
 
+  /* FIXME: */
+  gtk_widget_set_sensitive(delete_signature, FALSE);
+  gtk_widget_set_sensitive(edit_signature, FALSE);
+  
   return hbox;
 }
 
@@ -495,6 +499,10 @@ static GtkWidget *create_signatures_edit_buttons(void)
   g_signal_connect(GTK_WIDGET(new_signature), "clicked",
                    G_CALLBACK(new_current_signature_cb),
                    &current_signature);
+
+  /* FIXME: */
+  gtk_widget_set_sensitive(add_signature, FALSE);
+  gtk_widget_set_sensitive(new_signature, FALSE);
 
   return hbox;
 }
