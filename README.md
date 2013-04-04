@@ -15,16 +15,20 @@ compose windows.
 
 Clone sylpheed-swich-signatures repository.
 
-  % git clone https://github.com/kenhys/sylpheed-switch-signature.git
-  % git submodule init
-  % git submodule update
+```
+% git clone https://github.com/kenhys/sylpheed-switch-signature.git
+% git submodule init
+% git submodule update
+```
 
 Then execute following commands
 
-  % ./autogen.sh
-  % ./configure --with-sylpheed-build-dir=/path/to/sylpheed_source_directory
-  % make
-  % make install
+```
+% ./autogen.sh
+% ./configure --with-sylpheed-build-dir=/path/to/sylpheed_source_directory
+% make
+% make install
+```
 
 # TODO
 
