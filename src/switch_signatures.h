@@ -50,7 +50,7 @@ struct _SwitchSignaturePair
   gchar *key;
   gchar *path;
   gchar *signature;
-}
+};
 typedef struct _SwitchSignaturePair SwitchSignaturePair;
 
 enum {
