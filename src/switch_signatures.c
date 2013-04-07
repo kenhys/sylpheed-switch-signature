@@ -409,13 +409,7 @@ static GtkWidget *create_signatures_store(void)
   GtkTreeStore *store;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
-  gint n_signatures, signature_no;
-  gchar *label;
-  gchar *signature;
-  gchar *key;
-  gchar *path;
-  gsize length;
-  GError *error;
+  gint n_signatures;
   GList *account_list;
   gint n_accounts;
   gint index;
