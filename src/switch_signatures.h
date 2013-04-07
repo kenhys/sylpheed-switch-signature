@@ -77,5 +77,6 @@ static void new_current_signature_cb(GtkWidget *widget,
 
 static void switch_signature_cb(GtkWidget *widget,
                                 gpointer data);
+static GList *get_signatures_list(void);
 
 #endif
