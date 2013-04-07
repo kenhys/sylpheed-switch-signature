@@ -420,6 +420,7 @@ static GtkWidget *create_signatures_store(void)
   gint n_accounts;
   gint index;
   PrefsAccount *account;
+  SwitchSignaturePair *pair;
 
   SYLPF_START_FUNC;
 
@@ -445,45 +446,17 @@ static GtkWidget *create_signatures_store(void)
     }
   }
 
-  n_signatures = SYLPF_GET_RC_INTEGER(SYLPF_OPTION.rcfile,
-                                      SYLPF_ID, "signatures");
-  SYLPF_DEBUG_VAL("n_signatures", n_signatures);
-  
-#define FETCH_RC_STRING(format, var) \
+  account_list = get_signatures_list();
+  n_signatures = g_list_length(account_list);
+  for (index = 0; index < n_signatures; index++) {
+    pair = g_list_nth_data(account_list, index);
 
-  if (n_signatures > 0) {
-    for (signature_no = 1; signature_no < n_signatures; signature_no++) {
-      key = g_strdup_printf("signatures%d", signature_no);
-      label = SYLPF_GET_RC_STRING(SYLPF_OPTION.rcfile, SYLPF_ID, key);
-      g_free(key);
-
-      SYLPF_DEBUG_STR("label", label);
-
-      key = g_strdup_printf("%d.txt", signature_no);
-      path = g_build_path(G_DIR_SEPARATOR_S,
-                          get_rc_dir(),
-                          "plugins",
-                          SYLPF_ID,
-                          key,
-                          NULL);
-      g_free(key);
-        
-      SYLPF_DEBUG_STR("signature file", path);
-
-      g_file_get_contents(path, &signature, &length, &error);
-      
-      SYLPF_DEBUG_STR("signature", signature);
-
-      gtk_tree_store_append(store, &iter, NULL);
-      gtk_tree_store_set(store, &iter,
-                         SIGNATURE_ACCOUNT_COLUMN, label,
-                         SIGNATURE_SUMMARY_COLUMN, signature,
-                         -1);
-
-      g_free(signature);
-    }
+    gtk_tree_store_append(store, &iter, NULL);
+    gtk_tree_store_set(store, &iter,
+                       SIGNATURE_ACCOUNT_COLUMN, pair->label,
+                       SIGNATURE_SUMMARY_COLUMN, pair->signature,
+                       -1);
   }
-#undef FETCH_RC_STRING
 
   tree = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 
