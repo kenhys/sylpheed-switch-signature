@@ -347,6 +347,60 @@ static GtkWidget *create_signatures_manage_buttons(void)
 
 
 
+static GList *get_signatures_list(void)
+{
+  gint n_signatures;
+  gint signature_no;
+  gchar *key;
+  gchar *label;
+  gchar *signature;
+  gchar *path;
+  gsize n_length;
+  GError *error;
+  SwitchSignaturePair *pair;
+  GList *list;
+
+  SYLPF_START_FUNC;
+
+  n_signatures = SYLPF_GET_RC_INTEGER(SYLPF_OPTION.rcfile,
+                                      SYLPF_ID, "signatures");
+  SYLPF_DEBUG_VAL("n_signatures", n_signatures);
+
+  list = NULL;
+
+  if (n_signatures > 0) {
+    for (signature_no = 1; signature_no < n_signatures; signature_no++) {
+      pair = g_new(SwitchSignaturePair, 1);
+
+      key = g_strdup_printf("signatures%d", signature_no);
+      label = SYLPF_GET_RC_STRING(SYLPF_OPTION.rcfile, SYLPF_ID, key);
+      pair->key = key;
+      pair->label = label;
+
+      SYLPF_DEBUG_STR("label", label);
+
+      key = g_strdup_printf("%d.txt", signature_no);
+      path = g_build_path(G_DIR_SEPARATOR_S,
+                          get_rc_dir(),
+                          "plugins",
+                          SYLPF_ID,
+                          key,
+                          NULL);
+      pair->path = path;
+      SYLPF_DEBUG_STR("signature file", path);
+
+      g_file_get_contents(path, &signature, &n_length, &error);
+      pair->signature = signature;
+
+      SYLPF_DEBUG_STR("signature", signature);
+
+      list = g_list_append(list, pair);
+      g_error_free(error);
+    }
+  }
+  SYLPF_RETURN_VALUE(list);
+}
+
 static GtkWidget *create_signatures_store(void)
 {
   GtkWidget *hbox;
