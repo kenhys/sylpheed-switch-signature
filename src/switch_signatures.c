@@ -88,7 +88,8 @@ static void compose_created_cb(GObject *obj, gpointer data)
   GList *list, *account_list;
   gint index;
   PrefsAccount *account;
-  
+  SwitchSignaturePair *pair;
+
   SYLPF_START_FUNC;
 
   compose = data;
@@ -119,6 +120,15 @@ static void compose_created_cb(GObject *obj, gpointer data)
     account = g_list_nth_data(account_list, index);
     if (account->sig_text) {
       list = g_list_append(list, account->sig_text);
+    }
+  }
+  account_list = get_signatures_list();
+  for (index = 0; index < g_list_length(account_list); index++) {
+    pair = g_list_nth_data(account_list, index);
+    if (pair) {
+      if (pair->signature) {
+        list = g_list_append(list, pair->signature);
+      }
     }
   }
   current_signature.signatures = list;
