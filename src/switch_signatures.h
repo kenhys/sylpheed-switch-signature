@@ -49,6 +49,7 @@ struct _SwitchSignaturePair
 {
   gchar *key;
   gchar *path;
+  gchar *label;
   gchar *signature;
 };
 typedef struct _SwitchSignaturePair SwitchSignaturePair;
