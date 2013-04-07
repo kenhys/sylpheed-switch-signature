@@ -359,7 +359,8 @@ static GList *get_signatures_list(void)
   GError *error;
   SwitchSignaturePair *pair;
   GList *list;
-
+  gboolean succeeded;
+  
   SYLPF_START_FUNC;
 
   n_signatures = SYLPF_GET_RC_INTEGER(SYLPF_OPTION.rcfile,
@@ -389,13 +390,15 @@ static GList *get_signatures_list(void)
       pair->path = path;
       SYLPF_DEBUG_STR("signature file", path);
 
-      g_file_get_contents(path, &signature, &n_length, &error);
+      succeeded = g_file_get_contents(path, &signature, &n_length, &error);
       pair->signature = signature;
 
       SYLPF_DEBUG_STR("signature", signature);
 
       list = g_list_append(list, pair);
-      g_error_free(error);
+      if (!succeeded) {
+        g_error_free(error);
+      }
     }
   }
   SYLPF_RETURN_VALUE(list);
