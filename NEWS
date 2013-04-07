@@ -1,5 +1,9 @@
 News of autoforward
 
+* 0.2.0 (2013-04-07)
+
+  * support to switch signatures which are saved as external files.
+
 * 0.1.0 (2013-04-04)
 
   * initial release.
