@@ -45,6 +45,14 @@ struct _SwitchSignature
 };
 typedef struct _SwitchSignature SwitchSignature;
 
+struct _SwitchSignaturePair
+{
+  gchar *key;
+  gchar *path;
+  gchar *signature;
+}
+typedef struct _SwitchSignaturePair SwitchSignaturePair;
+
 enum {
   SIGNATURE_ACCOUNT_COLUMN,
   SIGNATURE_SUMMARY_COLUMN,
