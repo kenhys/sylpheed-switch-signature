@@ -332,20 +332,26 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 static GtkWidget *create_signatures_manage_buttons(void)
 {
   GtkWidget *hbox;
+  GtkWidget *new_signature;
   GtkWidget *edit_signature;
   GtkWidget *delete_signature;
 
   hbox = gtk_hbox_new(FALSE, 0);
+  new_signature = gtk_button_new_from_stock(GTK_STOCK_NEW);
   edit_signature = gtk_button_new_from_stock(GTK_STOCK_EDIT);
   delete_signature = gtk_button_new_from_stock(GTK_STOCK_DELETE);
   gtk_box_pack_end(GTK_BOX(hbox), delete_signature, FALSE, FALSE, 0);
   gtk_box_pack_end(GTK_BOX(hbox), edit_signature, FALSE, FALSE, 0);
+  gtk_box_pack_end(GTK_BOX(hbox), new_signature, FALSE, FALSE, 0);
 
   g_signal_connect(GTK_WIDGET(delete_signature), "clicked",
                    G_CALLBACK(delete_current_signature_cb),
                    &current_signature);
   g_signal_connect(GTK_WIDGET(edit_signature), "clicked",
                    G_CALLBACK(edit_current_signature_cb),
+                   &current_signature);
+  g_signal_connect(GTK_WIDGET(new_signature), "clicked",
+                   G_CALLBACK(new_current_signature_cb),
                    &current_signature);
 
   /* FIXME: */
