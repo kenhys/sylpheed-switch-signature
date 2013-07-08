@@ -266,6 +266,7 @@ static GtkWidget *create_preference_dialog(SwitchSignaturesOption *option)
                                        NULL);
 
   sylpf_init_preference_dialog_size(dialog);
+  current_signature.parent = dialog;
 
   vbox = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
   hbox = gtk_hbox_new(TRUE, SYLPF_BOX_SPACE);
@@ -293,12 +294,10 @@ static GtkWidget *create_signature_dialog(SwitchSignaturesOption *option)
 {
   GtkWidget *dialog;
   GtkWidget *window;
-  gpointer mainwin;
 
   SYLPF_START_FUNC;
 
-  mainwin = syl_plugin_main_window_get();
-  window = ((MainWindow*)mainwin)->window;
+  window = current_signature.parent;
 
   dialog = gtk_dialog_new_with_buttons(_("Switch Signatures"),
                                        GTK_WINDOW(window),
@@ -309,7 +308,7 @@ static GtkWidget *create_signature_dialog(SwitchSignaturesOption *option)
 
   sylpf_init_preference_dialog_size(dialog);
 
-  return dialog;
+  SYLPF_RETURN_VALUE(dialog);
 }
 
 static GtkWidget *create_config_main_page(GtkWidget *dialog,

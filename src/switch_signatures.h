@@ -35,6 +35,8 @@ struct _SwitchSignature
   gchar *mail;
   gchar *signature;
 
+  GtkWidget *parent;
+
   GtkTreeStore *store;
   GtkWidget *tree;
 
