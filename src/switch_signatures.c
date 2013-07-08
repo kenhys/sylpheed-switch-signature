@@ -34,9 +34,9 @@ static SylPluginInfo info = {
   N_(PLUGIN_DESC)
 };
 
-SwitchSignaturesOption SYLPF_OPTION;
+static SwitchSignaturesOption SYLPF_OPTION;
 
-SwitchSignature current_signature;
+static SwitchSignature current_signature;
 
 void plugin_load(void)
 {
