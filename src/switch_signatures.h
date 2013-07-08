@@ -78,14 +78,11 @@ static GtkWidget *create_signatures_store(void);
 static GtkWidget *create_signatures_manage_buttons(void);
 
 static GtkWidget *create_signatures_edit_area(void);
-static GtkWidget *create_signatures_edit_buttons(void);
 
 static void edit_current_signature_cb(GtkWidget *widget,
                                       gpointer data);
 static void delete_current_signature_cb(GtkWidget *widget,
                                         gpointer data);
-static void add_current_signature_cb(GtkWidget *widget,
-                                     gpointer data);
 static void new_current_signature_cb(GtkWidget *widget,
                                      gpointer data);
 

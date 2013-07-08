@@ -294,6 +294,9 @@ static GtkWidget *create_signature_dialog(SwitchSignaturesOption *option)
 {
   GtkWidget *dialog;
   GtkWidget *window;
+  GtkWidget *edit_frame;
+  GtkWidget *vbox;
+  GtkWidget *area;
 
   SYLPF_START_FUNC;
 
@@ -306,7 +309,18 @@ static GtkWidget *create_signature_dialog(SwitchSignaturesOption *option)
                                        GTK_STOCK_OK, GTK_RESPONSE_OK,
                                        NULL);
 
-  sylpf_init_preference_dialog_size(dialog);
+  vbox = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
+
+  edit_frame = sylpf_pack_widget_with_aligned_frame(vbox,
+                                                    _("Edit signatures"));
+
+
+  area = create_signatures_edit_area();
+
+  gtk_box_pack_start(GTK_BOX(vbox), area, TRUE, TRUE, 0);
+
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),
+                     edit_frame, TRUE, TRUE, 0);
 
   SYLPF_RETURN_VALUE(dialog);
 }
@@ -317,7 +331,6 @@ static GtkWidget *create_config_main_page(GtkWidget *dialog,
 {
   GtkWidget *vbox;
   GtkWidget *page;
-  GtkWidget *edit_frame;
   GtkWidget *manage_frame;
   GtkWidget *area;
   GtkWidget *buttons;
@@ -337,17 +350,6 @@ static GtkWidget *create_config_main_page(GtkWidget *dialog,
                                                       _("Manage signatures"));
   gtk_box_pack_start(GTK_BOX(page), manage_frame, FALSE, FALSE, 0);
 
-
-  vbox = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
-
-  area = create_signatures_edit_area();
-  buttons = create_signatures_edit_buttons();
-
-  gtk_box_pack_start(GTK_BOX(vbox), area, TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox), buttons, FALSE, FALSE, 0);
-
-  edit_frame = sylpf_pack_widget_with_aligned_frame(vbox, _("Edit signatures"));
-  gtk_box_pack_start(GTK_BOX(page), edit_frame, TRUE, TRUE, 0);
 
 
   SYLPF_RETURN_VALUE(page);
@@ -526,12 +528,22 @@ static GtkWidget *create_signatures_edit_area(void)
   GtkWidget *scrolled;
   GtkTextBuffer *tbuffer;
   GtkWidget *tview;
-
+  GtkWidget *label, *name;
+  GtkWidget *use_signature_file;
+  
   SYLPF_START_FUNC;
 
-  hbox = gtk_hbox_new(TRUE, SYLPF_BOX_SPACE);
-  vbox = gtk_vbox_new(TRUE, SYLPF_BOX_SPACE);
-  gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, SYLPF_BOX_SPACE);
+  vbox = gtk_vbox_new(FALSE, 0);
+  hbox = gtk_hbox_new(FALSE, SYLPF_BOX_SPACE);
+
+  label = gtk_label_new(_("Signature name"));
+  name = gtk_entry_new();
+
+  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox), name, TRUE, TRUE, 0);
+
+  gtk_box_pack_start(GTK_BOX(vbox), hbox,
+                     FALSE, TRUE, SYLPF_BOX_SPACE);
 
   scrolled = gtk_scrolled_window_new(NULL, NULL);
 
@@ -541,34 +553,15 @@ static GtkWidget *create_signatures_edit_area(void)
   gtk_container_add(GTK_CONTAINER(scrolled), tview);
 
   gtk_box_pack_start(GTK_BOX(vbox), scrolled, TRUE, TRUE, SYLPF_BOX_SPACE);
+  
+  use_signature_file = gtk_check_button_new_with_label(_("Use signature file which is saved local storage."));
 
-  SYLPF_RETURN_VALUE(hbox);
-}
+  gtk_box_pack_start(GTK_BOX(vbox), use_signature_file,
+                     FALSE, TRUE, SYLPF_BOX_SPACE);
 
-static GtkWidget *create_signatures_edit_buttons(void)
-{
-  GtkWidget *hbox;
-  GtkWidget *add_signature;
-  GtkWidget *new_signature;
+  gtk_widget_show_all(vbox);
 
-  hbox = gtk_hbox_new(FALSE, 0);
-  add_signature = gtk_button_new_from_stock(GTK_STOCK_SAVE);
-  new_signature = gtk_button_new_from_stock(GTK_STOCK_NEW);
-  gtk_box_pack_end(GTK_BOX(hbox), add_signature, FALSE, FALSE, 0);
-  gtk_box_pack_end(GTK_BOX(hbox), new_signature, FALSE, FALSE, 0);
-
-  g_signal_connect(GTK_WIDGET(add_signature), "clicked",
-                   G_CALLBACK(add_current_signature_cb),
-                   &current_signature);
-  g_signal_connect(GTK_WIDGET(new_signature), "clicked",
-                   G_CALLBACK(new_current_signature_cb),
-                   &current_signature);
-
-  /* FIXME: */
-  gtk_widget_set_sensitive(add_signature, FALSE);
-  gtk_widget_set_sensitive(new_signature, FALSE);
-
-  return hbox;
+  SYLPF_RETURN_VALUE(vbox);
 }
 
 static void edit_current_signature_cb(GtkWidget *widget,
@@ -579,12 +572,6 @@ static void edit_current_signature_cb(GtkWidget *widget,
 
 static void delete_current_signature_cb(GtkWidget *widget,
                                         gpointer data)
-{
-  syl_plugin_alertpanel_message("", "Not Implemented yet", ALERT_NOTICE);
-}
-
-static void add_current_signature_cb(GtkWidget *widget,
-                                     gpointer data)
 {
   syl_plugin_alertpanel_message("", "Not Implemented yet", ALERT_NOTICE);
 }
