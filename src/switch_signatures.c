@@ -274,7 +274,7 @@ static GtkWidget *create_preference_dialog(SwitchSignaturesOption *option)
   gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
 
   notebook = gtk_notebook_new();
-  page = create_config_main_page(notebook, SYLPF_OPTION.rcfile);
+  page = create_config_main_page(dialog, notebook, option);
   label = gtk_label_new(_("General"));
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), page, label);
 
@@ -289,7 +289,32 @@ static GtkWidget *create_preference_dialog(SwitchSignaturesOption *option)
   SYLPF_RETURN_VALUE(dialog);
 }
 
-static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
+static GtkWidget *create_signature_dialog(SwitchSignaturesOption *option)
+{
+  GtkWidget *dialog;
+  GtkWidget *window;
+  gpointer mainwin;
+
+  SYLPF_START_FUNC;
+
+  mainwin = syl_plugin_main_window_get();
+  window = ((MainWindow*)mainwin)->window;
+
+  dialog = gtk_dialog_new_with_buttons(_("Switch Signatures"),
+                                       GTK_WINDOW(window),
+                                       GTK_DIALOG_MODAL,
+                                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                       GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                       NULL);
+
+  sylpf_init_preference_dialog_size(dialog);
+
+  return dialog;
+}
+
+static GtkWidget *create_config_main_page(GtkWidget *dialog,
+                                          GtkWidget *notebook,
+                                          SwitchSignaturesOption *option)
 {
   GtkWidget *vbox;
   GtkWidget *page;
@@ -568,7 +593,28 @@ static void add_current_signature_cb(GtkWidget *widget,
 static void new_current_signature_cb(GtkWidget *widget,
                                      gpointer data)
 {
-  syl_plugin_alertpanel_message("", "Not Implemented yet", ALERT_NOTICE);
+  GtkWidget *dialog;
+  gint response;
+
+  SYLPF_START_FUNC;
+
+  dialog = create_signature_dialog(&SYLPF_OPTION);
+
+  gtk_widget_show_all(dialog);
+  response = gtk_dialog_run(GTK_DIALOG(dialog));
+
+  switch (response) {
+  case GTK_RESPONSE_OK:
+    save_preference(&SYLPF_OPTION);
+    break;
+  case GTK_RESPONSE_CANCEL:
+  default:
+    break;
+  }
+
+  gtk_widget_destroy(dialog);
+
+  SYLPF_END_FUNC;
 }
 
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)

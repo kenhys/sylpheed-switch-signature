@@ -67,8 +67,11 @@ static void compose_created_cb(GObject *obj, gpointer compose);
 static void preference_menu_cb(void);
 static GtkWidget *create_preference_dialog(SwitchSignaturesOption *option);
 
-static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey);
+static GtkWidget *create_config_main_page(GtkWidget *dialog,
+                                          GtkWidget *notebook,
+                                          SwitchSignaturesOption *option);
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey);
+static GtkWidget *create_signature_dialog(SwitchSignaturesOption *option);
 static GtkWidget *create_signatures_store(void);
 static GtkWidget *create_signatures_manage_buttons(void);
 
