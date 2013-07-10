@@ -530,7 +530,9 @@ static GtkWidget *create_signatures_edit_area(void)
   GtkWidget *tview;
   GtkWidget *label, *name;
   GtkWidget *use_signature_file;
-  
+  GtkWidget *entry;
+  GtkWidget *button;
+
   SYLPF_START_FUNC;
 
   vbox = gtk_vbox_new(FALSE, 0);
@@ -556,7 +558,17 @@ static GtkWidget *create_signatures_edit_area(void)
   
   use_signature_file = gtk_check_button_new_with_label(_("Use signature file which is saved local storage."));
 
+  hbox = gtk_hbox_new(FALSE, 0);
+  entry = gtk_entry_new();
+  button = gtk_button_new_from_stock(GTK_STOCK_FILE);
+  gtk_box_pack_start(GTK_BOX(hbox), entry,
+                     TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox), button,
+                     FALSE, FALSE, 0);
+
   gtk_box_pack_start(GTK_BOX(vbox), use_signature_file,
+                     FALSE, TRUE, SYLPF_BOX_SPACE);
+  gtk_box_pack_start(GTK_BOX(vbox), hbox,
                      FALSE, TRUE, SYLPF_BOX_SPACE);
 
   gtk_widget_show_all(vbox);
