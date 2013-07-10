@@ -309,6 +309,8 @@ static GtkWidget *create_signature_dialog(SwitchSignaturesOption *option)
                                        GTK_STOCK_OK, GTK_RESPONSE_OK,
                                        NULL);
 
+  sylpf_init_preference_dialog_size(dialog);
+
   vbox = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
 
   edit_frame = sylpf_pack_widget_with_aligned_frame(vbox,
