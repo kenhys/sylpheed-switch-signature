@@ -44,6 +44,11 @@ struct _SwitchSignature
 
   gint signature_index;
   GList *signatures;
+
+  GtkWidget *name;
+  GtkWidget *content;
+  gboolean use_signature_file;
+  GtkWidget *signature_path;
 };
 typedef struct _SwitchSignature SwitchSignature;
 
