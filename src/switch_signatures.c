@@ -572,6 +572,9 @@ static GtkWidget *create_signatures_edit_area(void)
   gtk_box_pack_start(GTK_BOX(vbox), hbox,
                      FALSE, TRUE, SYLPF_BOX_SPACE);
 
+  current_signature.signature_path_button = button;
+  current_signature.signature_path = entry;
+
   g_signal_connect(GTK_WIDGET(use_signature_file), "toggled",
                    G_CALLBACK(use_signature_file_cb),
                    &current_signature);

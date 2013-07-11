@@ -49,6 +49,7 @@ struct _SwitchSignature
   GtkWidget *content;
   gboolean use_signature_file;
   GtkWidget *signature_path;
+  GtkWidget *signature_path_button;
 };
 typedef struct _SwitchSignature SwitchSignature;
 
