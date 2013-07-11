@@ -563,15 +563,16 @@ static GtkWidget *create_signatures_edit_area(void)
   hbox = gtk_hbox_new(FALSE, 0);
   entry = gtk_entry_new();
   button = gtk_button_new_from_stock(GTK_STOCK_FILE);
-  gtk_box_pack_start(GTK_BOX(hbox), entry,
-                     TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(hbox), button,
-                     FALSE, FALSE, 0);
+  SYLPF_BOX_PACKS(hbox, entry, TRUE, TRUE, 0);
+  SYLPF_BOX_PACKS(hbox, button, FALSE, FALSE, 0);
 
-  gtk_box_pack_start(GTK_BOX(vbox), use_signature_file,
-                     FALSE, TRUE, SYLPF_BOX_SPACE);
-  gtk_box_pack_start(GTK_BOX(vbox), hbox,
-                     FALSE, TRUE, SYLPF_BOX_SPACE);
+  SYLPF_BOX_PACKS(vbox, use_signature_file,
+                  FALSE, TRUE, SYLPF_BOX_SPACE);
+  SYLPF_BOX_PACKS(vbox, hbox,
+                  FALSE, TRUE, SYLPF_BOX_SPACE);
+
+  gtk_widget_set_sensitive(entry, FALSE);
+  gtk_widget_set_sensitive(button, FALSE);
 
   gtk_widget_show_all(vbox);
 
