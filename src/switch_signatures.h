@@ -96,7 +96,7 @@ static void switch_signature_cb(GtkWidget *widget,
                                 gpointer data);
 static GList *get_signatures_list(void);
 
-static void use_signature_file_cb(GtkWidget *widget,
+static void use_signature_file_cb(GtkToggleButton *widget,
                                   gpointer data);
 static void signature_file_path_cb(GtkWidget *widget,
                                    gpointer data);
