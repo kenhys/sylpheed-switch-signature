@@ -598,6 +598,8 @@ static void signature_file_path_cb(GtkWidget *widget,
   GtkWidget *dialog;
   gchar *filename;
 
+  SYLPF_START_FUNC;
+
   dialog = gtk_file_chooser_dialog_new(_("Select signature file"),
                                        GTK_WINDOW(current_signature.parent),
                                        GTK_FILE_CHOOSER_ACTION_OPEN,
@@ -610,6 +612,8 @@ static void signature_file_path_cb(GtkWidget *widget,
                        filename);
   }
   gtk_widget_destroy (dialog);
+
+  SYLPF_END_FUNC;
 }
 
 static void edit_current_signature_cb(GtkWidget *widget,
