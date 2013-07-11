@@ -574,9 +574,26 @@ static GtkWidget *create_signatures_edit_area(void)
   gtk_widget_set_sensitive(entry, FALSE);
   gtk_widget_set_sensitive(button, FALSE);
 
+  g_signal_connect(GTK_WIDGET(use_signature_file), "checked",
+                   G_CALLBACK(use_signature_file_cb),
+                   &current_signature);
+  g_signal_connect(GTK_WIDGET(button), "clicked",
+                   G_CALLBACK(signature_file_path_cb),
+                   &current_signature);
+
   gtk_widget_show_all(vbox);
 
   SYLPF_RETURN_VALUE(vbox);
+}
+
+static void use_signature_file_cb(GtkWidget *widget,
+                                  gpointer data)
+{
+}
+
+static void signature_file_path_cb(GtkWidget *widget,
+                                   gpointer data)
+{
 }
 
 static void edit_current_signature_cb(GtkWidget *widget,
