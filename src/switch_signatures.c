@@ -556,6 +556,8 @@ static GtkWidget *create_signatures_edit_area(void)
   gtk_text_view_set_editable(GTK_TEXT_VIEW(tview), TRUE);
   gtk_container_add(GTK_CONTAINER(scrolled), tview);
 
+  current_signature.content = tview;
+
   gtk_box_pack_start(GTK_BOX(vbox), scrolled, TRUE, TRUE, SYLPF_BOX_SPACE);
   
   use_signature_file = gtk_check_button_new_with_label(_("Use signature file which is saved local storage."));
@@ -593,6 +595,21 @@ static GtkWidget *create_signatures_edit_area(void)
 static void use_signature_file_cb(GtkToggleButton *widget,
                                   gpointer data)
 {
+  if (gtk_toggle_button_get_active(widget)) {
+    gtk_text_view_set_editable(GTK_TEXT_VIEW(current_signature.content),
+                               FALSE);
+    gtk_widget_set_sensitive(current_signature.signature_path,
+                             TRUE);
+    gtk_widget_set_sensitive(current_signature.signature_selector,
+                             TRUE);
+  } else {
+    gtk_text_view_set_editable(GTK_TEXT_VIEW(current_signature.content),
+                               TRUE);
+    gtk_widget_set_sensitive(current_signature.signature_path,
+                             FALSE);
+    gtk_widget_set_sensitive(current_signature.signature_selector,
+                             FALSE);
+  }
 }
 
 static void signature_file_path_cb(GtkWidget *widget,
