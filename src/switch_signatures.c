@@ -594,6 +594,21 @@ static void use_signature_file_cb(GtkWidget *widget,
 static void signature_file_path_cb(GtkWidget *widget,
                                    gpointer data)
 {
+  GtkWidget *dialog;
+  gchar *filename;
+
+  dialog = gtk_file_chooser_dialog_new(_("Select signature file"),
+                                       GTK_WINDOW(current_signature.parent),
+                                       GTK_FILE_CHOOSER_ACTION_OPEN,
+                                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                       GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                       NULL);
+  if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
+    filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+    gtk_entry_set_text(GTK_ENTRY(current_signature.signature_path),
+                       filename);
+  }
+  gtk_widget_destroy (dialog);
 }
 
 static void edit_current_signature_cb(GtkWidget *widget,
