@@ -590,7 +590,7 @@ static GtkWidget *create_signatures_edit_area(void)
   SYLPF_RETURN_VALUE(vbox);
 }
 
-static void use_signature_file_cb(GtkWidget *widget,
+static void use_signature_file_cb(GtkToggleButton *widget,
                                   gpointer data)
 {
 }
