@@ -339,18 +339,18 @@ static GtkWidget *create_config_main_page(GtkWidget *dialog,
 
   SYLPF_START_FUNC;
 
-  page = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
+  page = gtk_vbox_new(TRUE, SYLPF_BOX_SPACE);
   vbox = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
 
   area = create_signatures_store();
   buttons = create_signatures_manage_buttons();
 
-  gtk_box_pack_start(GTK_BOX(vbox), area, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), area, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), buttons, FALSE, FALSE, 0);
 
   manage_frame = sylpf_pack_widget_with_aligned_frame(vbox,
                                                       _("Manage signatures"));
-  gtk_box_pack_start(GTK_BOX(page), manage_frame, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(page), manage_frame, TRUE, TRUE, 0);
 
 
 
@@ -451,6 +451,7 @@ static GList *get_signatures_list(void)
 static GtkWidget *create_signatures_store(void)
 {
   GtkWidget *hbox;
+  GtkWidget *scrolled;
   GtkWidget *tree;
   GtkTreeIter iter;
   GtkTreeStore *store;
@@ -516,7 +517,10 @@ static GtkWidget *create_signatures_store(void)
                                                     NULL);
   gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
-  gtk_box_pack_start(GTK_BOX(hbox), tree, TRUE, TRUE, 0);
+  scrolled = gtk_scrolled_window_new(NULL, NULL);
+  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled),
+                                        tree);
+  gtk_box_pack_start(GTK_BOX(hbox), scrolled, TRUE, TRUE, 0);
 
   current_signature.store = store;
   current_signature.tree = tree;
