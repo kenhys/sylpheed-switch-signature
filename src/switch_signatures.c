@@ -556,6 +556,7 @@ static GtkWidget *create_signatures_edit_area(void)
   gtk_text_view_set_editable(GTK_TEXT_VIEW(tview), TRUE);
   gtk_container_add(GTK_CONTAINER(scrolled), tview);
 
+  current_signature.name = name;
   current_signature.content = tview;
 
   gtk_box_pack_start(GTK_BOX(vbox), scrolled, TRUE, TRUE, SYLPF_BOX_SPACE);
@@ -653,8 +654,11 @@ static void new_current_signature_cb(GtkWidget *widget,
 {
   GtkWidget *dialog;
   gint response;
+  SwitchSignature *signature;
 
   SYLPF_START_FUNC;
+
+  signature = (SwitchSignature*)data;
 
   dialog = create_signature_dialog(&SYLPF_OPTION);
 
@@ -663,7 +667,7 @@ static void new_current_signature_cb(GtkWidget *widget,
 
   switch (response) {
   case GTK_RESPONSE_OK:
-    save_preference(&SYLPF_OPTION);
+    add_signature_to_store(signature);
     break;
   case GTK_RESPONSE_CANCEL:
   default:
@@ -674,6 +678,42 @@ static void new_current_signature_cb(GtkWidget *widget,
 
   SYLPF_END_FUNC;
 }
+
+static void add_signature_to_store(SwitchSignature *signature)
+{
+  GtkTreeStore *store;
+  GtkTreeIter iter;
+  GtkTextIter start;
+  GtkTextIter end;
+  GtkTextBuffer *buffer;
+  const gchar *name;
+  gchar *content;
+
+  SYLPF_START_FUNC;
+
+  store = signature->store;
+
+  name = gtk_entry_get_text(GTK_ENTRY(signature->name));
+
+  buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(signature->content));
+  gtk_text_buffer_get_start_iter(buffer, &start);
+  gtk_text_buffer_get_end_iter(buffer, &end);
+  content = gtk_text_buffer_get_text(buffer,
+                                     &start,
+                                     &end,
+                                     FALSE);
+
+  gtk_tree_store_append(store, &iter, NULL);
+  gtk_tree_store_set(store, &iter,
+                     SIGNATURE_ACCOUNT_COLUMN,
+                     name ? name : "",
+                     SIGNATURE_SUMMARY_COLUMN,
+                     content ? content : "",
+                     -1);
+
+  SYLPF_END_FUNC;
+}
+
 
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
 {

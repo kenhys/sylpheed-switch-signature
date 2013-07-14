@@ -101,4 +101,5 @@ static void use_signature_file_cb(GtkToggleButton *widget,
 static void signature_file_path_cb(GtkWidget *widget,
                                    gpointer data);
 
+static void add_signature_to_store(SwitchSignature *signature);
 #endif
