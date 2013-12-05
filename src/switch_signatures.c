@@ -203,7 +203,7 @@ static void switch_signature_cb(GtkWidget *widget, gpointer data)
                                 g_strcompress(signature));
     gtk_text_buffer_insert(buffer, &end_iter,
                            signature,
-                           g_utf8_strlen(signature, -1));
+                           strlen(signature));
     signs->signature_index++;
   }
 
