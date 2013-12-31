@@ -484,6 +484,7 @@ static GtkWidget *create_signatures_store(void)
                          SIGNATURE_ACCOUNT_COLUMN,
                          account->account_name ? account->account_name : "",
                          SIGNATURE_SUMMARY_COLUMN, account->sig_text,
+                         SIGNATURE_READONLY_FLAG_COLUMN, TRUE,
                          -1);
     }
   }
@@ -497,6 +498,7 @@ static GtkWidget *create_signatures_store(void)
     gtk_tree_store_set(store, &iter,
                        SIGNATURE_ACCOUNT_COLUMN, pair->label,
                        SIGNATURE_SUMMARY_COLUMN, pair->signature,
+                       SIGNATURE_READONLY_FLAG_COLUMN, FALSE,
                        -1);
   }
 
