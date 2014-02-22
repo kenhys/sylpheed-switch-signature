@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.68])
-AC_INIT([switch_signatures], [0.2.0], [kenhys@gmail.com])
+AC_INIT([switch_signatures], [0.3.0], [kenhys@gmail.com])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_SRCDIR([src/switch_signatures.h])
 AC_CONFIG_HEADERS([src/config.h])
@@ -23,7 +23,7 @@ m4_include(lib/sylplugin_factory/m4/compiler_flag.m4)
 
 # Checks for libraries.
 AM_PATH_GLIB_2_0(2.8.0,, AC_MSG_ERROR(Test for GLib failed. See the 'INSTALL' for help.))
-AM_PATH_GTK_2_0(2.8.0,, AC_MSG_ERROR(Test for Gtk failed. See the 'INSTALL' for help.))
+AM_PATH_GTK_2_0(2.10.14,, AC_MSG_ERROR(Test for Gtk failed. See the 'INSTALL' for help.))
 
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
@@ -33,6 +33,24 @@ AC_SUBST(GTK_LIBS)
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
+
+# Checks for debug
+AC_ARG_ENABLE(debug,
+              [AS_HELP_STRING([--enable-debug],
+                              [use debug flags (default=no)])],
+  [plugin_debug="$enableval"],
+  [plugin_debug="no"])
+if test "x$plugin_debug" != "xno"; then
+  plugin_debug="yes"
+  if test "$CLANG" = "yes"; then
+    CFLAGS="$CFLAGS -O0 -g"
+    CXXFLAGS="$CXXFLAGS -O0 -g"
+  elif test "$GCC" = "yes"; then
+    CFLAGS="$CFLAGS -O0 -g3"
+    CXXFLAGS="$CXXFLAGS -O0 -g3"
+  fi
+fi
+AC_SUBST(plugin_debug)
 
 m4_include(lib/sylplugin_factory/m4/sylplugin_factory.m4)
 
