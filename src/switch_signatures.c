@@ -471,7 +471,7 @@ static GtkWidget *create_signatures_store(void)
   store = gtk_tree_store_new(N_SIGNATURE_COLUMNS,
                              G_TYPE_STRING,
                              G_TYPE_STRING,
-                             G_TYPE_STRING);
+                             G_TYPE_BOOLEAN);
 
   account_list = account_get_list();
   n_accounts = g_list_length(account_list);
