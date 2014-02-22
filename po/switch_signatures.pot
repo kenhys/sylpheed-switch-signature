@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-04 21:18+0900\n"
+"POT-Creation-Date: 2014-02-23 06:28+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,34 +21,46 @@ msgstr ""
 msgid "Switch signature settings [switch_signatures]"
 msgstr ""
 
-#: src/switch_signatures.c:251
+#: src/switch_signatures.c:320 src/switch_signatures.c:364
 msgid "Switch Signatures"
 msgstr ""
 
-#: src/switch_signatures.c:268
+#: src/switch_signatures.c:338
 msgid "General"
 msgstr ""
 
-#: src/switch_signatures.c:272
+#: src/switch_signatures.c:342
 msgid "About"
 msgstr ""
 
-#: src/switch_signatures.c:303
-msgid "Manage signatures"
-msgstr ""
-
-#: src/switch_signatures.c:315
+#: src/switch_signatures.c:376
 msgid "Edit signatures"
 msgstr ""
 
-#: src/switch_signatures.c:433
+#: src/switch_signatures.c:411
+msgid "Manage signatures"
+msgstr ""
+
+#: src/switch_signatures.c:567
 msgid "Label"
 msgstr ""
 
-#: src/switch_signatures.c:440
+#: src/switch_signatures.c:574
 msgid "Signature"
 msgstr ""
 
-#: src/switch_signatures.c:542
+#: src/switch_signatures.c:608
+msgid "Signature name"
+msgstr ""
+
+#: src/switch_signatures.c:629
+msgid "Use signature file which is saved local storage."
+msgstr ""
+
+#: src/switch_signatures.c:689
+msgid "Select signature file"
+msgstr ""
+
+#: src/switch_signatures.c:801
 msgid "SwitchSignatures"
 msgstr ""
