@@ -2,7 +2,9 @@ lib_LTLIBRARIES = switch_signatures.la
 
 switch_signatures_la_SOURCES = \
 	switch_signatures.c \
-	switch_signatures.h \
+	switch_signatures.h
+
+nodist_switch_signatures_la_SOURCES = \
 	$(sylplugin_factory_source_dir)/src/sylplugin_factory.c \
 	$(sylplugin_factory_source_dir)/src/sylplugin_factory.h
 
