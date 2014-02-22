@@ -260,12 +260,10 @@ static void save_preference(SwitchSignaturesOption *option)
                           filename,
                           NULL);
       error = NULL;
-      if (g_file_test(path, G_FILE_TEST_EXISTS)) {
-        g_file_set_contents(path,
+      g_file_set_contents(path,
                           summary_text,
                           -1,
                           &error);
-      }
       g_free(label);
       g_free(filename);
       g_free(path);
