@@ -212,8 +212,53 @@ static void switch_signature_cb(GtkWidget *widget, gpointer data)
 
 static void save_preference(SwitchSignaturesOption *option)
 {
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gboolean valid;
+  gchar *account_text;
+  gchar *summary_text;
+  gboolean readonly_flag;
+  gint index;
+  gint n_signatures = 0;
+  gchar *filename, *path;
+  gchar *label;
+  GError *error;
+
   SYLPF_START_FUNC;
 
+  model = GTK_TREE_MODEL(current_signature.store);
+  valid = gtk_tree_model_get_iter_first(model, &iter);
+  index = 0;
+  while (valid) {
+    gtk_tree_model_get(model, &iter,
+                       SIGNATURE_ACCOUNT_COLUMN, &account_text,
+                       SIGNATURE_SUMMARY_COLUMN, &summary_text,
+                       SIGNATURE_READONLY_FLAG_COLUMN, &readonly_flag,
+                       -1);
+    g_print("readonly:%d account:%s summary:%s\n",
+            readonly_flag, account_text, summary_text);
+    index++;
+    if (!readonly_flag) {
+      n_signatures++;
+      label = g_strdup_printf("signatures%d", n_signatures);
+      SYLPF_SET_RC_STRING(option->rcfile, SYLPF_ID, label, account_text);
+      filename = g_strdup_printf("%d.txt", n_signatures);
+      path = g_build_path(G_DIR_SEPARATOR_S,
+                          get_rc_dir(),
+                          "plugins",
+                          SYLPF_ID,
+                          filename,
+                          NULL);
+      g_file_set_contents(path,
+                          summary_text,
+                          -1,
+                          &error);
+      g_free(label);
+      g_free(filename);
+      g_free(path);
+    }
+    valid = gtk_tree_model_iter_next(model, &iter);
+  }
   SYLPF_END_FUNC;
 }
 
