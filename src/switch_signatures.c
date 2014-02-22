@@ -222,7 +222,7 @@ static void save_preference(SwitchSignaturesOption *option)
   gint n_signatures = 0;
   gchar *filename, *path;
   gchar *label;
-  GError *error;
+  GError *error = NULL;
 
   SYLPF_START_FUNC;
 
