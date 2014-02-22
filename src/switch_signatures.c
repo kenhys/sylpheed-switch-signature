@@ -760,6 +760,8 @@ static void add_signature_to_store(SwitchSignature *signature)
                      name ? name : "",
                      SIGNATURE_SUMMARY_COLUMN,
                      content ? content : "",
+                     SIGNATURE_READONLY_FLAG_COLUMN,
+                     FALSE,
                      -1);
 
   SYLPF_END_FUNC;
