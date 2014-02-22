@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.68])
-AC_INIT([switch_signatures], [0.3.0], [kenhys@gmail.com])
+AC_INIT([switch_signatures], [0.3.1], [kenhys@gmail.com])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_SRCDIR([src/switch_signatures.h])
 AC_CONFIG_HEADERS([src/config.h])
