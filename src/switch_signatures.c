@@ -459,7 +459,7 @@ static GList *get_signatures_list(void)
   list = NULL;
 
   if (n_signatures > 0) {
-    for (signature_no = 1; signature_no < n_signatures; signature_no++) {
+    for (signature_no = 1; signature_no <= n_signatures; signature_no++) {
       pair = g_new(SwitchSignaturePair, 1);
 
       key = g_strdup_printf("signatures%d", signature_no);
