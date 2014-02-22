@@ -259,6 +259,9 @@ static void save_preference(SwitchSignaturesOption *option)
     }
     valid = gtk_tree_model_iter_next(model, &iter);
   }
+  SYLPF_SET_RC_INTEGER(option->rcfile, SYLPF_ID, "signatures", n_signatures);
+  sylpf_save_option_rcfile((SylPluginFactoryOption*)option);
+
   SYLPF_END_FUNC;
 }
 
