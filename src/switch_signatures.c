@@ -229,6 +229,16 @@ static void save_preference(SwitchSignaturesOption *option)
   model = GTK_TREE_MODEL(current_signature.store);
   valid = gtk_tree_model_get_iter_first(model, &iter);
   index = 0;
+
+  path = g_build_path(G_DIR_SEPARATOR_S,
+                          get_rc_dir(),
+                          "plugins",
+                          SYLPF_ID,
+                          NULL);
+  if (!g_file_test(path, G_FILE_TEST_IS_DIR)) {
+    g_mkdir_with_parents(path, 0700);
+  }
+
   while (valid) {
     gtk_tree_model_get(model, &iter,
                        SIGNATURE_ACCOUNT_COLUMN, &account_text,
