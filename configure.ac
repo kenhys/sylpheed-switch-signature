@@ -28,6 +28,14 @@ AM_PATH_GTK_2_0(2.10.14,, AC_MSG_ERROR(Test for Gtk failed. See the 'INSTALL' fo
 AC_SUBST(GTK_CFLAGS)
 AC_SUBST(GTK_LIBS)
 
+ALL_LINGUAS="en ja"
+GETTEXT_PACKAGE=switch_signatures
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Define text domain.])
+
+dnl AM_GLIB_GNU_GETTEXT
+AM_GNU_GETTEXT([external])
+
 # Checks for header files.
 
 # Checks for typedefs, structures, and compiler characteristics.
@@ -55,7 +63,9 @@ AC_SUBST(plugin_debug)
 m4_include(lib/sylplugin_factory/m4/sylplugin_factory.m4)
 
 AC_CONFIG_FILES([Makefile
-                 src/Makefile])
+                 po/Makefile.in
+                 src/Makefile
+])
 AC_OUTPUT
 
 dnl Output the configuration summary
