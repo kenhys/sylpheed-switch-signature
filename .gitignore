@@ -12,5 +12,5 @@ Makefile
 configure
 config/*
 m4/lt*
-m4/libtool*
+m4/lib*
 autom4te.*
