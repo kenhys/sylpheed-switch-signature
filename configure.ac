@@ -33,8 +33,8 @@ GETTEXT_PACKAGE=switch_signatures
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Define text domain.])
 
-dnl AM_GLIB_GNU_GETTEXT
-AM_GNU_GETTEXT([external])
+AM_GLIB_GNU_GETTEXT
+dnl AM_GNU_GETTEXT([external])
 
 # Checks for header files.
 

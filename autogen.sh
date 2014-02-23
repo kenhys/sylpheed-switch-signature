@@ -10,6 +10,7 @@ run()
 }
 
 run aclocal ${ACLOCAL_ARGS}
+run glib-gettextize --copy --force
 run libtoolize --copy --force
 run autoheader
 run automake --add-missing --foreign --copy
