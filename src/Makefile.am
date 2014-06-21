@@ -1,3 +1,5 @@
+AUTOMAKE_OPTIONS = subdir-objects
+
 lib_LTLIBRARIES = switch_signatures.la
 
 switch_signatures_la_SOURCES = \
