@@ -13,7 +13,7 @@ nodist_switch_signatures_la_SOURCES = \
 switch_signatures_la_LDFLAGS = -module -no-undefined -avoid-version
 
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	$(GTK_CFLAGS) \
 	-I$(includedir) \
 	-I$(sylpheed_build_dir)/libsylph \
