@@ -1,4 +1,4 @@
-update-po:
+update-po-byhand:
 	xgettext src/*.[ch] -k_ -kN_ -o po/$(PLUGIN_NAME).pot
 	if [ ! -f po/ja.po ]; then \
 		if [ -f po/$(PLUGIN_NAME).pot ]; then \
