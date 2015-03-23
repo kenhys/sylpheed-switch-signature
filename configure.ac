@@ -77,7 +77,7 @@ echo "$PACKAGE $VERSION"
 echo ""
 echo "Sylpheed build directory : $sylpheed_build_dir"
 echo ""
-echo "The binary will be installed in $prefix/lib/sylpheed/plugins"
+echo "The binary will be installed in $sylplugin_dir"
 echo ""
 echo "Configure finished, type 'make' to build."
 
