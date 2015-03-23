@@ -8,7 +8,7 @@ AC_CONFIG_SRCDIR([src/switch_signatures.h])
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_MACRO_DIR([m4])
 
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([foreign])
 
 AC_DEFINE([SYLPF_ID], [PACKAGE_NAME], [""])
 AC_DEFINE([SYLPF_OPTION], [switch_signatures_option], [""])
