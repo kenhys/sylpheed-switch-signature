@@ -1,5 +1,5 @@
-const gchar *copyright =""
-"Copyright (c) 2013, HAYASHI Kentaro <kenhys@gmail.com>\n"
+const gcharn *copyright =""
+"Copyright (c) 2013 - 2015, HAYASHI Kentaro <kenhys@gmail.com>\n"
 "All rights reserved.\n"
 "\n"
 "Redistribution and use in source and binary forms, with or without modification,\n"
