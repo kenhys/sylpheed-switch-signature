@@ -6,10 +6,6 @@ switch_signatures_la_SOURCES = \
 	switch_signatures.c \
 	switch_signatures.h
 
-nodist_switch_signatures_la_SOURCES = \
-	$(sylplugin_factory_source_dir)/src/sylplugin_factory.c \
-	$(sylplugin_factory_source_dir)/src/sylplugin_factory.h
-
 switch_signatures_la_LDFLAGS = -module -no-undefined -avoid-version
 
 
