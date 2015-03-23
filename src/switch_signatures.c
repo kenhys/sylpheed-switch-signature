@@ -49,7 +49,6 @@ void plugin_load(void)
   syl_plugin_signal_connect("compose-created",
                             G_CALLBACK(compose_created_cb), NULL);
 
-  syl_plugin_add_menuitem("/Tools", NULL, NULL, NULL);
   syl_plugin_add_menuitem("/Tools",
                           N_("Switch signature settings [switch_signatures]"),
                           preference_menu_cb,
