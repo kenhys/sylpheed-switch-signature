@@ -1,8 +1,8 @@
 AUTOMAKE_OPTIONS = subdir-objects
 
-switch_signaturesdir = $(sylplugin_dir)
+libdir = $(sylplugin_dir)
 
-switch_signatures_LTLIBRARIES = switch_signatures.la
+lib_LTLIBRARIES = switch_signatures.la
 
 switch_signatures_la_SOURCES = \
 	switch_signatures.c \
