@@ -3,8 +3,8 @@
 
 AC_PREREQ([2.68])
 m4_define(SS_MAJOR, 0)
-m4_define(SS_MINOR, 3)
-m4_define(SS_MICRO, 1)
+m4_define(SS_MINOR, 4)
+m4_define(SS_MICRO, 0)
 m4_define(SS_VERSION, [SS_MAJOR.SS_MINOR.SS_MICRO])
 AC_INIT([switch_signatures], [SS_VERSION], [kenhys@gmail.com])
 AC_CONFIG_AUX_DIR([config])
