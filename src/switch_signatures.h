@@ -26,6 +26,7 @@ struct _SwitchSignaturesOption {
   GtkWidget *plugin_off;
   GtkWidget *plugin_switch;
   GtkTooltips *plugin_tooltip;
+  gint max_unique_id;
 };
 typedef struct  _SwitchSignaturesOption SwitchSignaturesOption;
 
