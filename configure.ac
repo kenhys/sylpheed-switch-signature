@@ -2,11 +2,21 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.68])
-AC_INIT([switch_signatures], [0.3.1], [kenhys@gmail.com])
+m4_define(SS_MAJOR, 0)
+m4_define(SS_MINOR, 3)
+m4_define(SS_MICRO, 1)
+m4_define(SS_VERSION, [SS_MAJOR.SS_MINOR.SS_MICRO])
+AC_INIT([switch_signatures], [SS_VERSION], [kenhys@gmail.com])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_SRCDIR([src/switch_signatures.h])
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_MACRO_DIR([m4])
+
+AC_SUBST(MAJOR_VERSION, [SS_MAJOR])
+AC_SUBST(MINOR_VERSION, [SS_MINOR])
+AC_SUBST(MICRO_VERSION, [SS_MICRO])
+m4_define(SS_REVISION, m4_include(version))
+AC_SUBST(BUILD_REVISION, [SS_REVISION])
 
 AM_INIT_AUTOMAKE([foreign])
 
