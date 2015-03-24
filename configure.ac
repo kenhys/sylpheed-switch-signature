@@ -68,6 +68,7 @@ PKG_CHECK_MODULES([SYLPF], [sylplugin-factory])
 AC_CONFIG_FILES([Makefile
                  po/Makefile.in
                  src/Makefile
+                 res/version.rc
 ])
 AC_OUTPUT
 
