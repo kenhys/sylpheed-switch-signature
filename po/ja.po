@@ -6,13 +6,13 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-04 21:18+0900\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Project-Id-Version: switch_signatures 0.3.1\n"
+"Report-Msgid-Bugs-To: kenhys@gmail.com\n"
+"POT-Creation-Date: 2014-02-23 07:20+0900\n"
+"PO-Revision-Date: 2014-02-23 07:14+0900\n"
 "Last-Translator: HAYASHI Kentaro <kenhys@gmail.com>\n"
 "Language-Team: HAYASHI Kentaro <kenhys@gmail.com>\n"
-"Language: \n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -21,34 +21,46 @@ msgstr ""
 msgid "Switch signature settings [switch_signatures]"
 msgstr "署名切り替え設定 [switch_signatures]"
 
-#: src/switch_signatures.c:251
+#: src/switch_signatures.c:320 src/switch_signatures.c:364
 msgid "Switch Signatures"
 msgstr ""
 
-#: src/switch_signatures.c:268
+#: src/switch_signatures.c:338
 msgid "General"
 msgstr "一般"
 
-#: src/switch_signatures.c:272
+#: src/switch_signatures.c:342
 msgid "About"
 msgstr "情報"
 
-#: src/switch_signatures.c:303
-msgid "Manage signatures"
-msgstr "署名を管理"
-
-#: src/switch_signatures.c:315
+#: src/switch_signatures.c:376
 msgid "Edit signatures"
 msgstr "署名を編集"
 
-#: src/switch_signatures.c:433
+#: src/switch_signatures.c:411
+msgid "Manage signatures"
+msgstr "署名を管理"
+
+#: src/switch_signatures.c:567
 msgid "Label"
 msgstr "ラベル"
 
-#: src/switch_signatures.c:440
+#: src/switch_signatures.c:574
 msgid "Signature"
 msgstr "署名"
 
-#: src/switch_signatures.c:542
+#: src/switch_signatures.c:608
+msgid "Signature name"
+msgstr "署名の名前"
+
+#: src/switch_signatures.c:629
+msgid "Use signature file which is saved local storage."
+msgstr "ローカルストレージに保存された署名ファイルを使う"
+
+#: src/switch_signatures.c:689
+msgid "Select signature file"
+msgstr "署名ファイルを選択する"
+
+#: src/switch_signatures.c:801
 msgid "SwitchSignatures"
 msgstr ""

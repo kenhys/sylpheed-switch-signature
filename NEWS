@@ -1,5 +1,17 @@
 News of autoforward
 
+* 0.4.0 (2015-03-24)
+
+  * Clean up build proces.
+
+* 0.3.1 (2014-02-23)
+
+  * Fix crash bug when opening preference after adding custom signature.
+
+* 0.3.0 (2014-02-23)
+
+  * support configuration interface.
+
 * 0.2.0 (2013-04-07)
 
   * support to switch signatures which are saved as external files.

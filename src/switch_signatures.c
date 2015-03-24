@@ -34,9 +34,9 @@ static SylPluginInfo info = {
   N_(PLUGIN_DESC)
 };
 
-SwitchSignaturesOption SYLPF_OPTION;
+static SwitchSignaturesOption SYLPF_OPTION;
 
-SwitchSignature current_signature;
+static SwitchSignature current_signature;
 
 void plugin_load(void)
 {
@@ -49,7 +49,6 @@ void plugin_load(void)
   syl_plugin_signal_connect("compose-created",
                             G_CALLBACK(compose_created_cb), NULL);
 
-  syl_plugin_add_menuitem("/Tools", NULL, NULL, NULL);
   syl_plugin_add_menuitem("/Tools",
                           N_("Switch signature settings [switch_signatures]"),
                           preference_menu_cb,
@@ -203,7 +202,7 @@ static void switch_signature_cb(GtkWidget *widget, gpointer data)
                                 g_strcompress(signature));
     gtk_text_buffer_insert(buffer, &end_iter,
                            signature,
-                           g_utf8_strlen(signature, -1));
+                           strlen(signature));
     signs->signature_index++;
   }
 
@@ -212,7 +211,66 @@ static void switch_signature_cb(GtkWidget *widget, gpointer data)
 
 static void save_preference(SwitchSignaturesOption *option)
 {
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gboolean valid;
+  gchar *account_text;
+  gchar *summary_text;
+  gboolean readonly_flag;
+  gint index;
+  gint n_signatures = 0;
+  gchar *filename, *path;
+  gchar *label;
+  GError *error = NULL;
+
   SYLPF_START_FUNC;
+
+  model = GTK_TREE_MODEL(current_signature.store);
+  valid = gtk_tree_model_get_iter_first(model, &iter);
+  index = 0;
+
+  path = g_build_path(G_DIR_SEPARATOR_S,
+                          get_rc_dir(),
+                          "plugins",
+                          SYLPF_ID,
+                          NULL);
+  if (!g_file_test(path, G_FILE_TEST_IS_DIR)) {
+    g_mkdir_with_parents(path, 0700);
+  }
+
+  while (valid) {
+    gtk_tree_model_get(model, &iter,
+                       SIGNATURE_ACCOUNT_COLUMN, &account_text,
+                       SIGNATURE_SUMMARY_COLUMN, &summary_text,
+                       SIGNATURE_READONLY_FLAG_COLUMN, &readonly_flag,
+                       -1);
+    g_print("readonly:%d account:%s summary:%s\n",
+            readonly_flag, account_text, summary_text);
+    index++;
+    if (!readonly_flag) {
+      n_signatures++;
+      label = g_strdup_printf("signatures%d", n_signatures);
+      SYLPF_SET_RC_STRING(option->rcfile, SYLPF_ID, label, account_text);
+      filename = g_strdup_printf("%d.txt", n_signatures);
+      path = g_build_path(G_DIR_SEPARATOR_S,
+                          get_rc_dir(),
+                          "plugins",
+                          SYLPF_ID,
+                          filename,
+                          NULL);
+      error = NULL;
+      g_file_set_contents(path,
+                          summary_text,
+                          -1,
+                          &error);
+      g_free(label);
+      g_free(filename);
+      g_free(path);
+    }
+    valid = gtk_tree_model_iter_next(model, &iter);
+  }
+  SYLPF_SET_RC_INTEGER(option->rcfile, SYLPF_ID, "signatures", n_signatures);
+  sylpf_save_option_rcfile((SylPluginFactoryOption*)option);
 
   SYLPF_END_FUNC;
 }
@@ -266,6 +324,7 @@ static GtkWidget *create_preference_dialog(SwitchSignaturesOption *option)
                                        NULL);
 
   sylpf_init_preference_dialog_size(dialog);
+  current_signature.parent = dialog;
 
   vbox = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
   hbox = gtk_hbox_new(TRUE, SYLPF_BOX_SPACE);
@@ -274,7 +333,7 @@ static GtkWidget *create_preference_dialog(SwitchSignaturesOption *option)
   gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), hbox);
 
   notebook = gtk_notebook_new();
-  page = create_config_main_page(notebook, SYLPF_OPTION.rcfile);
+  page = create_config_main_page(dialog, notebook, option);
   label = gtk_label_new(_("General"));
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), page, label);
 
@@ -289,41 +348,68 @@ static GtkWidget *create_preference_dialog(SwitchSignaturesOption *option)
   SYLPF_RETURN_VALUE(dialog);
 }
 
-static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
+static GtkWidget *create_signature_dialog(SwitchSignaturesOption *option)
+{
+  GtkWidget *dialog;
+  GtkWidget *window;
+  GtkWidget *edit_frame;
+  GtkWidget *vbox;
+  GtkWidget *area;
+
+  SYLPF_START_FUNC;
+
+  window = current_signature.parent;
+
+  dialog = gtk_dialog_new_with_buttons(_("Switch Signatures"),
+                                       GTK_WINDOW(window),
+                                       GTK_DIALOG_MODAL,
+                                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                       GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                       NULL);
+
+  sylpf_init_preference_dialog_size(dialog);
+
+  vbox = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
+
+  edit_frame = sylpf_pack_widget_with_aligned_frame(vbox,
+                                                    _("Edit signatures"));
+
+
+  area = create_signatures_edit_area();
+
+  gtk_box_pack_start(GTK_BOX(vbox), area, TRUE, TRUE, 0);
+
+  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),
+                     edit_frame, TRUE, TRUE, 0);
+
+  SYLPF_RETURN_VALUE(dialog);
+}
+
+static GtkWidget *create_config_main_page(GtkWidget *dialog,
+                                          GtkWidget *notebook,
+                                          SwitchSignaturesOption *option)
 {
   GtkWidget *vbox;
   GtkWidget *page;
-  GtkWidget *edit_frame;
   GtkWidget *manage_frame;
   GtkWidget *area;
   GtkWidget *buttons;
 
   SYLPF_START_FUNC;
 
-  page = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
+  page = gtk_vbox_new(TRUE, SYLPF_BOX_SPACE);
   vbox = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
 
   area = create_signatures_store();
   buttons = create_signatures_manage_buttons();
 
-  gtk_box_pack_start(GTK_BOX(vbox), area, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(vbox), area, TRUE, TRUE, 0);
   gtk_box_pack_start(GTK_BOX(vbox), buttons, FALSE, FALSE, 0);
 
   manage_frame = sylpf_pack_widget_with_aligned_frame(vbox,
                                                       _("Manage signatures"));
-  gtk_box_pack_start(GTK_BOX(page), manage_frame, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(page), manage_frame, TRUE, TRUE, 0);
 
-
-  vbox = gtk_vbox_new(FALSE, SYLPF_BOX_SPACE);
-
-  area = create_signatures_edit_area();
-  buttons = create_signatures_edit_buttons();
-
-  gtk_box_pack_start(GTK_BOX(vbox), area, TRUE, TRUE, 0);
-  gtk_box_pack_start(GTK_BOX(vbox), buttons, FALSE, FALSE, 0);
-
-  edit_frame = sylpf_pack_widget_with_aligned_frame(vbox, _("Edit signatures"));
-  gtk_box_pack_start(GTK_BOX(page), edit_frame, TRUE, TRUE, 0);
 
 
   SYLPF_RETURN_VALUE(page);
@@ -332,20 +418,26 @@ static GtkWidget *create_config_main_page(GtkWidget *notebook, GKeyFile *pkey)
 static GtkWidget *create_signatures_manage_buttons(void)
 {
   GtkWidget *hbox;
+  GtkWidget *new_signature;
   GtkWidget *edit_signature;
   GtkWidget *delete_signature;
 
   hbox = gtk_hbox_new(FALSE, 0);
+  new_signature = gtk_button_new_from_stock(GTK_STOCK_NEW);
   edit_signature = gtk_button_new_from_stock(GTK_STOCK_EDIT);
   delete_signature = gtk_button_new_from_stock(GTK_STOCK_DELETE);
   gtk_box_pack_end(GTK_BOX(hbox), delete_signature, FALSE, FALSE, 0);
   gtk_box_pack_end(GTK_BOX(hbox), edit_signature, FALSE, FALSE, 0);
+  gtk_box_pack_end(GTK_BOX(hbox), new_signature, FALSE, FALSE, 0);
 
   g_signal_connect(GTK_WIDGET(delete_signature), "clicked",
                    G_CALLBACK(delete_current_signature_cb),
                    &current_signature);
   g_signal_connect(GTK_WIDGET(edit_signature), "clicked",
                    G_CALLBACK(edit_current_signature_cb),
+                   &current_signature);
+  g_signal_connect(GTK_WIDGET(new_signature), "clicked",
+                   G_CALLBACK(new_current_signature_cb),
                    &current_signature);
 
   /* FIXME: */
@@ -380,7 +472,7 @@ static GList *get_signatures_list(void)
   list = NULL;
 
   if (n_signatures > 0) {
-    for (signature_no = 1; signature_no < n_signatures; signature_no++) {
+    for (signature_no = 1; signature_no <= n_signatures; signature_no++) {
       pair = g_new(SwitchSignaturePair, 1);
 
       key = g_strdup_printf("signatures%d", signature_no);
@@ -417,6 +509,7 @@ static GList *get_signatures_list(void)
 static GtkWidget *create_signatures_store(void)
 {
   GtkWidget *hbox;
+  GtkWidget *scrolled;
   GtkWidget *tree;
   GtkTreeIter iter;
   GtkTreeStore *store;
@@ -434,9 +527,10 @@ static GtkWidget *create_signatures_store(void)
   hbox = gtk_hbox_new(FALSE, 0);
 
   store = gtk_tree_store_new(N_SIGNATURE_COLUMNS,
+                             G_TYPE_INT,
                              G_TYPE_STRING,
                              G_TYPE_STRING,
-                             G_TYPE_STRING);
+                             G_TYPE_BOOLEAN);
 
   account_list = account_get_list();
   n_accounts = g_list_length(account_list);
@@ -446,9 +540,12 @@ static GtkWidget *create_signatures_store(void)
     if (account->sig_text) {
       gtk_tree_store_append(store, &iter, NULL);
       gtk_tree_store_set(store, &iter,
+                         SIGNATURE_ID_COLUMN,
+                         index,
                          SIGNATURE_ACCOUNT_COLUMN,
                          account->account_name ? account->account_name : "",
                          SIGNATURE_SUMMARY_COLUMN, account->sig_text,
+                         SIGNATURE_READONLY_FLAG_COLUMN, TRUE,
                          -1);
     }
   }
@@ -460,8 +557,10 @@ static GtkWidget *create_signatures_store(void)
 
     gtk_tree_store_append(store, &iter, NULL);
     gtk_tree_store_set(store, &iter,
+                       SIGNATURE_ID_COLUMN, n_accounts + index,
                        SIGNATURE_ACCOUNT_COLUMN, pair->label,
                        SIGNATURE_SUMMARY_COLUMN, pair->signature,
+                       SIGNATURE_READONLY_FLAG_COLUMN, FALSE,
                        -1);
   }
 
@@ -482,7 +581,10 @@ static GtkWidget *create_signatures_store(void)
                                                     NULL);
   gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
-  gtk_box_pack_start(GTK_BOX(hbox), tree, TRUE, TRUE, 0);
+  scrolled = gtk_scrolled_window_new(NULL, NULL);
+  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled),
+                                        tree);
+  gtk_box_pack_start(GTK_BOX(hbox), scrolled, TRUE, TRUE, 0);
 
   current_signature.store = store;
   current_signature.tree = tree;
@@ -496,12 +598,24 @@ static GtkWidget *create_signatures_edit_area(void)
   GtkWidget *scrolled;
   GtkTextBuffer *tbuffer;
   GtkWidget *tview;
+  GtkWidget *label, *name;
+  GtkWidget *use_signature_file;
+  GtkWidget *entry;
+  GtkWidget *button;
 
   SYLPF_START_FUNC;
 
-  hbox = gtk_hbox_new(TRUE, SYLPF_BOX_SPACE);
-  vbox = gtk_vbox_new(TRUE, SYLPF_BOX_SPACE);
-  gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, SYLPF_BOX_SPACE);
+  vbox = gtk_vbox_new(FALSE, 0);
+  hbox = gtk_hbox_new(FALSE, SYLPF_BOX_SPACE);
+
+  label = gtk_label_new(_("Signature name"));
+  name = gtk_entry_new();
+
+  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox), name, TRUE, TRUE, 0);
+
+  gtk_box_pack_start(GTK_BOX(vbox), hbox,
+                     FALSE, TRUE, SYLPF_BOX_SPACE);
 
   scrolled = gtk_scrolled_window_new(NULL, NULL);
 
@@ -510,35 +624,85 @@ static GtkWidget *create_signatures_edit_area(void)
   gtk_text_view_set_editable(GTK_TEXT_VIEW(tview), TRUE);
   gtk_container_add(GTK_CONTAINER(scrolled), tview);
 
+  current_signature.name = name;
+  current_signature.content = tview;
+
   gtk_box_pack_start(GTK_BOX(vbox), scrolled, TRUE, TRUE, SYLPF_BOX_SPACE);
-
-  SYLPF_RETURN_VALUE(hbox);
-}
-
-static GtkWidget *create_signatures_edit_buttons(void)
-{
-  GtkWidget *hbox;
-  GtkWidget *add_signature;
-  GtkWidget *new_signature;
+  
+  use_signature_file = gtk_check_button_new_with_label(_("Use signature file which is saved local storage."));
 
   hbox = gtk_hbox_new(FALSE, 0);
-  add_signature = gtk_button_new_from_stock(GTK_STOCK_SAVE);
-  new_signature = gtk_button_new_from_stock(GTK_STOCK_NEW);
-  gtk_box_pack_end(GTK_BOX(hbox), add_signature, FALSE, FALSE, 0);
-  gtk_box_pack_end(GTK_BOX(hbox), new_signature, FALSE, FALSE, 0);
+  entry = gtk_entry_new();
+  button = gtk_button_new_from_stock(GTK_STOCK_FILE);
 
-  g_signal_connect(GTK_WIDGET(add_signature), "clicked",
-                   G_CALLBACK(add_current_signature_cb),
+  gtk_box_pack_start(GTK_BOX(hbox), entry, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
+
+  gtk_box_pack_start(GTK_BOX(vbox), use_signature_file,
+                     FALSE, TRUE, SYLPF_BOX_SPACE);
+  gtk_box_pack_start(GTK_BOX(vbox), hbox,
+                     FALSE, TRUE, SYLPF_BOX_SPACE);
+
+  current_signature.signature_selector = button;
+  current_signature.signature_path = entry;
+
+  g_signal_connect(GTK_WIDGET(use_signature_file), "toggled",
+                   G_CALLBACK(use_signature_file_cb),
                    &current_signature);
-  g_signal_connect(GTK_WIDGET(new_signature), "clicked",
-                   G_CALLBACK(new_current_signature_cb),
+  g_signal_connect(GTK_WIDGET(button), "clicked",
+                   G_CALLBACK(signature_file_path_cb),
                    &current_signature);
 
-  /* FIXME: */
-  gtk_widget_set_sensitive(add_signature, FALSE);
-  gtk_widget_set_sensitive(new_signature, FALSE);
+  gtk_widget_set_sensitive(entry, FALSE);
+  gtk_widget_set_sensitive(button, FALSE);
 
-  return hbox;
+  gtk_widget_show_all(vbox);
+
+  SYLPF_RETURN_VALUE(vbox);
+}
+
+static void use_signature_file_cb(GtkToggleButton *widget,
+                                  gpointer data)
+{
+  if (gtk_toggle_button_get_active(widget)) {
+    gtk_text_view_set_editable(GTK_TEXT_VIEW(current_signature.content),
+                               FALSE);
+    gtk_widget_set_sensitive(current_signature.signature_path,
+                             TRUE);
+    gtk_widget_set_sensitive(current_signature.signature_selector,
+                             TRUE);
+  } else {
+    gtk_text_view_set_editable(GTK_TEXT_VIEW(current_signature.content),
+                               TRUE);
+    gtk_widget_set_sensitive(current_signature.signature_path,
+                             FALSE);
+    gtk_widget_set_sensitive(current_signature.signature_selector,
+                             FALSE);
+  }
+}
+
+static void signature_file_path_cb(GtkWidget *widget,
+                                   gpointer data)
+{
+  GtkWidget *dialog;
+  gchar *filename;
+
+  SYLPF_START_FUNC;
+
+  dialog = gtk_file_chooser_dialog_new(_("Select signature file"),
+                                       GTK_WINDOW(current_signature.parent),
+                                       GTK_FILE_CHOOSER_ACTION_OPEN,
+                                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                       GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                       NULL);
+  if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
+    filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+    gtk_entry_set_text(GTK_ENTRY(current_signature.signature_path),
+                       filename);
+  }
+  gtk_widget_destroy (dialog);
+
+  SYLPF_END_FUNC;
 }
 
 static void edit_current_signature_cb(GtkWidget *widget,
@@ -553,17 +717,73 @@ static void delete_current_signature_cb(GtkWidget *widget,
   syl_plugin_alertpanel_message("", "Not Implemented yet", ALERT_NOTICE);
 }
 
-static void add_current_signature_cb(GtkWidget *widget,
-                                     gpointer data)
-{
-  syl_plugin_alertpanel_message("", "Not Implemented yet", ALERT_NOTICE);
-}
-
 static void new_current_signature_cb(GtkWidget *widget,
                                      gpointer data)
 {
-  syl_plugin_alertpanel_message("", "Not Implemented yet", ALERT_NOTICE);
+  GtkWidget *dialog;
+  gint response;
+  SwitchSignature *signature;
+
+  SYLPF_START_FUNC;
+
+  signature = (SwitchSignature*)data;
+
+  dialog = create_signature_dialog(&SYLPF_OPTION);
+
+  gtk_widget_show_all(dialog);
+  response = gtk_dialog_run(GTK_DIALOG(dialog));
+
+  switch (response) {
+  case GTK_RESPONSE_OK:
+    add_signature_to_store(signature);
+    break;
+  case GTK_RESPONSE_CANCEL:
+  default:
+    break;
+  }
+
+  gtk_widget_destroy(dialog);
+
+  SYLPF_END_FUNC;
 }
+
+static void add_signature_to_store(SwitchSignature *signature)
+{
+  GtkTreeStore *store;
+  GtkTreeIter iter;
+  GtkTextIter start;
+  GtkTextIter end;
+  GtkTextBuffer *buffer;
+  const gchar *name;
+  gchar *content;
+
+  SYLPF_START_FUNC;
+
+  store = signature->store;
+
+  name = gtk_entry_get_text(GTK_ENTRY(signature->name));
+
+  buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(signature->content));
+  gtk_text_buffer_get_start_iter(buffer, &start);
+  gtk_text_buffer_get_end_iter(buffer, &end);
+  content = gtk_text_buffer_get_text(buffer,
+                                     &start,
+                                     &end,
+                                     FALSE);
+
+  gtk_tree_store_append(store, &iter, NULL);
+  gtk_tree_store_set(store, &iter,
+                     SIGNATURE_ACCOUNT_COLUMN,
+                     name ? name : "",
+                     SIGNATURE_SUMMARY_COLUMN,
+                     content ? content : "",
+                     SIGNATURE_READONLY_FLAG_COLUMN,
+                     FALSE,
+                     -1);
+
+  SYLPF_END_FUNC;
+}
+
 
 static GtkWidget *create_config_about_page(GtkWidget *notebook, GKeyFile *pkey)
 {
