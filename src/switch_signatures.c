@@ -527,6 +527,7 @@ static GtkWidget *create_signatures_store(void)
   hbox = gtk_hbox_new(FALSE, 0);
 
   store = gtk_tree_store_new(N_SIGNATURE_COLUMNS,
+                             G_TYPE_INT,
                              G_TYPE_STRING,
                              G_TYPE_STRING,
                              G_TYPE_BOOLEAN);
@@ -539,6 +540,8 @@ static GtkWidget *create_signatures_store(void)
     if (account->sig_text) {
       gtk_tree_store_append(store, &iter, NULL);
       gtk_tree_store_set(store, &iter,
+                         SIGNATURE_ID_COLUMN,
+                         index,
                          SIGNATURE_ACCOUNT_COLUMN,
                          account->account_name ? account->account_name : "",
                          SIGNATURE_SUMMARY_COLUMN, account->sig_text,
@@ -554,6 +557,7 @@ static GtkWidget *create_signatures_store(void)
 
     gtk_tree_store_append(store, &iter, NULL);
     gtk_tree_store_set(store, &iter,
+                       SIGNATURE_ID_COLUMN, n_accounts + index,
                        SIGNATURE_ACCOUNT_COLUMN, pair->label,
                        SIGNATURE_SUMMARY_COLUMN, pair->signature,
                        SIGNATURE_READONLY_FLAG_COLUMN, FALSE,
