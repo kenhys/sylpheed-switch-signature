@@ -63,6 +63,7 @@ struct _SwitchSignaturePair
 typedef struct _SwitchSignaturePair SwitchSignaturePair;
 
 enum {
+  SIGNATURE_ID_COLUMN,
   SIGNATURE_ACCOUNT_COLUMN,
   SIGNATURE_SUMMARY_COLUMN,
   SIGNATURE_READONLY_FLAG_COLUMN,
