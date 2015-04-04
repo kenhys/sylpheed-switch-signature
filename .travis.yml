@@ -3,8 +3,9 @@ compiler:
   - gcc
   - clang
 notifications:
-  recipients:
-    - kenhys@gmail.com
+  email:
+    recipients:
+      - kenhys@gmail.com
 branches:
   only:
     - master
