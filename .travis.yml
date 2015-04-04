@@ -19,5 +19,5 @@ before_script:
   - curl --location https://github.com/kenhys/sylpheed-plugin-factory/raw/master/misc/travis/sylplugin-factory.sh | sh
   - ./autogen.sh
 script:
-  - ./configure --with-sylpheed-build-dir=`pwd`/sylpheed
+  - ./configure --with-sylpheed-build-dir=`pwd`/sylpheed --with-sylpheed-plugin-dir=/usr/lib/sylpheed/plugins
   - make
