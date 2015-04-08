@@ -12,6 +12,7 @@ run()
 if [ -d .git ]; then
     git log --abbrev-commit --oneline -1 | cut -d' ' -f 1 > version
 fi
+mkdir -p m4
 run aclocal ${ACLOCAL_ARGS}
 run libtoolize --copy --force
 run autoheader
